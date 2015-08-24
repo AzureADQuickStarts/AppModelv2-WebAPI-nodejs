@@ -26,9 +26,9 @@ Next, clone the sample repo and install the NPM.
 
 From your shell or command line:
 
-* `$ git clone git@github.com:AzureADSamples/Convergence-OpenIDConnect-Nodejs.git`
+* `$ git clone git@github.com:AzureADSamples/AppModelv2-WebAPI-nodejs.git`
 * `$ npm install`
-* `$cd passport-azure-ad`
+* `$cd lib/passport-azure-ad`
 * `$ npm install`
 *
 
