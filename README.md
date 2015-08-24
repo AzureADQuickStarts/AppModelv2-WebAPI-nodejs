@@ -28,7 +28,7 @@ From your shell or command line:
 
 * `$ git clone git@github.com:AzureADSamples/AppModelv2-WebAPI-nodejs.git`
 * `$ npm install`
-* `$cd lib/passport-azure-ad`
+* `$cd /lib/passport-azure-ad`
 * `$ npm install`
 *
 
