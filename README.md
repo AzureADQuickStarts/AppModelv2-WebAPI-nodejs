@@ -1,6 +1,6 @@
 #Windows Azure Active Directory OIDC Web API Sample
 
-This Node.js app will give you with a quick and easy way to set up a Web application in node.js with Express usind OpenID Connect. The sample server included in the download are designed to run on any platform.
+This Node.js app will give you with a quick and easy way to set up a Web application in node.js with Express using OpenID Connect. The sample server included in the download is designed to run on any platform.
 
 We've released all of the source code for this example in GitHub under an MIT license, so feel free to clone (or even better, fork!) and provide feedback on the forums.
 
