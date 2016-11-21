@@ -32,7 +32,6 @@ var config = require('./config');
 var passport = require('passport');
 var OIDCBearerStrategy = require('passport-azure-ad').BearerStrategy;
 
-
 // We pass these options in to the ODICBearerStrategy.
 
 var options = {
@@ -49,8 +48,7 @@ var options = {
     loggingLevel: config.creds.loggingLevel,
 };
 
-// array to hold logged in users and the current logged in user (owner)
-var users = [];
+// current owner
 var owner = null;
 
 // Our logger
@@ -61,7 +59,7 @@ var log = bunyan.createLogger({
 // MongoDB setup
 // Setup some configuration
 var serverPort = process.env.PORT || 3000;
-var serverURI = (process.env.PORT) ? config.mongoose_auth_mongohq : config.mongoose_auth_local;
+var serverURI = config.mongoose_auth_local;
 
 // Connect to MongoDB
 global.db = mongoose.connect(serverURI);
@@ -80,15 +78,12 @@ var TaskSchema = new Schema({
 mongoose.model('Task', TaskSchema);
 var Task = mongoose.model('Task');
 
-
-
 /**
  *
  * APIs for our REST Task server
  */
 
 // Create a task
-
 function createTask(req, res, next) {
 
     // Resitify currently has a bug which doesn't allow you to set default headers
@@ -123,12 +118,9 @@ function createTask(req, res, next) {
     });
 
     return next();
-
 }
 
-
 // Delete a task by name
-
 function removeTask(req, res, next) {
 
     Task.remove({
@@ -148,37 +140,7 @@ function removeTask(req, res, next) {
     });
 }
 
-// Delete all tasks
-
-function removeAll(req, res, next) {
-    Task.remove();
-    res.send(204);
-    return next();
-}
-
-
-// Get a specific task based on name
-
-function getTask(req, res, next) {
-
-    log.info('getTask was called for: ', owner);
-    Task.find({
-        owner: owner
-    }, function(err, data) {
-        if (err) {
-            req.log.warn(err, 'get: unable to read %s', owner);
-            next(err);
-            return;
-        }
-
-        res.json(data);
-    });
-
-    return next();
-}
-
 /// Simple returns the list of TODOs that were loaded.
-
 function listTasks(req, res, next) {
     // Resitify currently has a bug which doesn't allow you to set default headers
     // This headers comply with CORS and allow us to mongodbServer our response to any origin
@@ -216,7 +178,6 @@ function listTasks(req, res, next) {
 }
 
 ///--- Errors for communicating something interesting back to the client
-
 function MissingTaskError() {
     restify.RestError.call(this, {
         statusCode: 409,
@@ -229,41 +190,9 @@ function MissingTaskError() {
 }
 util.inherits(MissingTaskError, restify.RestError);
 
-
-function TaskExistsError(owner) {
-    assert.string(owner, 'owner');
-
-    restify.RestError.call(this, {
-        statusCode: 409,
-        restCode: 'TaskExists',
-        message: owner + ' already exists',
-        constructorOpt: TaskExistsError
-    });
-
-    this.name = 'TaskExistsError';
-}
-util.inherits(TaskExistsError, restify.RestError);
-
-
-function TaskNotFoundError(owner) {
-    assert.string(owner, 'owner');
-
-    restify.RestError.call(this, {
-        statusCode: 404,
-        restCode: 'TaskNotFound',
-        message: owner + ' was not found',
-        constructorOpt: TaskNotFoundError
-    });
-
-    this.name = 'TaskNotFoundError';
-}
-
-util.inherits(TaskNotFoundError, restify.RestError);
-
 /**
  * Our Server
  */
-
 
 var server = restify.createServer({
     name: "Windows Azure Active Directroy TODO Server",
@@ -304,46 +233,15 @@ server.use(restify.authorizationParser()); // Looks for authorization headers
 server.use(passport.initialize()); // Starts passport
 server.use(passport.session()); // Provides session support
 
-/**
-/*
-/* Calling the OIDCBearerStrategy and managing users
-/*
-/* Passport pattern provides the need to manage users and info tokens
-/* with a FindorCreate() method that must be provided by the implementor.
-/* Here we just autoregister any user and implement a FindById().
-/* You'll want to do something smarter.
-**/
-
-var findById = function(id, fn) {
-    for (var i = 0, len = users.length; i < len; i++) {
-        var user = users[i];
-        if (user.oid === id) {
-            log.info('Found user: ', user);
-            return fn(null, user);
-        }
-    }
-    return fn(null, null);
-};
-
-
 var bearerStrategy = new OIDCBearerStrategy(options,
     function(token, done) {
-        log.info('verifying the user');
         log.info(token, 'was the token retreived');
-        findById(token.oid, function(err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                // "Auto-registration"
-                log.info('User was added automatically as they were new. Their oid is: ', token.oid);
-                users.push(token);
-                owner = token.oid;
-                return done(null, token);
-            }
+        if (!token.oid)
+            done(new Error('oid is not found in token'));
+        else {
             owner = token.oid;
-            return done(null, user, token);
-        });
+            done(null, token);
+        }
     }
 );
 
@@ -365,49 +263,21 @@ passport.use(bearerStrategy);
 server.get('/api/tasks', passport.authenticate('oauth-bearer', {
     session: false
 }), listTasks);
-server.get('/api/tasks', passport.authenticate('oauth-bearer', {
-    session: false
-}), listTasks);
-server.get('/api/tasks/:owner', passport.authenticate('oauth-bearer', {
-    session: false
-}), getTask);
-server.head('/api/tasks/:owner', passport.authenticate('oauth-bearer', {
-    session: false
-}), getTask);
-server.post('/api/tasks/:owner/:task', passport.authenticate('oauth-bearer', {
-    session: false
-}), createTask);
 server.post('/api/tasks', passport.authenticate('oauth-bearer', {
     session: false
 }), createTask);
-server.del('/api/tasks/:owner/:task', passport.authenticate('oauth-bearer', {
-    session: false
-}), removeTask);
-server.del('/api/tasks/:owner', passport.authenticate('oauth-bearer', {
-    session: false
-}), removeTask);
 server.del('/api/tasks', passport.authenticate('oauth-bearer', {
     session: false
 }), removeTask);
-server.del('/api/tasks', passport.authenticate('oauth-bearer', {
-    session: false
-}), removeAll, function respond(req, res, next) {
-    res.send(204);
-    next();
-});
-
 
 // Register a default '/' handler
 
 server.get('/', function root(req, res, next) {
     var routes = [
         'GET     /',
-        'POST    /api/tasks/:owner/:task',
-        'POST    /api/tasks (for JSON body)',
+        'POST    /api/tasks',
         'GET     /api/tasks',
-        'PUT     /api/tasks/:owner',
-        'GET     /api/tasks/:owner',
-        'DELETE  /api/tasks/:owner/:task'
+        'DELETE  /api/tasks'
     ];
     res.send(200, routes);
     next();
