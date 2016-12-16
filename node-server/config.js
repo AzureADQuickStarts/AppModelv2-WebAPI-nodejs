@@ -11,7 +11,7 @@ exports.creds = {
 
   // Required.
   // If you are using the common endpoint, you should either set `validateIssuer` to false, or provide a value for `issuer`.
-  validateIssuer: true,
+  validateIssuer: false,
 
   // Required. 
   // Set to true if you use `function(req, token, done)` as the verify callback.
