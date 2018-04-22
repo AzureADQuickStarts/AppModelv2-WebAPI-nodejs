@@ -1,4 +1,4 @@
-#Azure Active Directory Sample REST API Service for Node.js using MongoDB and Restify
+# Azure Active Directory Sample REST API Service for Node.js using MongoDB and Restify
 
 This Node.js server will give you a quick and easy way to set up a REST API Service. Then this service is integrated with Azure Active Directory for API protection using the OAuth2 protocol. The sample server included in the download is designed to run on any platform.
 
@@ -41,7 +41,7 @@ $ cd node-server
 $ npm install
 ```
 
-### Step 6: Configure your server using config.js
+## Configure your server using config.js
 
 Please update the `exports.creds` and `exports.mongoose_auth_local` in config.js as instructed.
 * Update `<tenant_name>` in `exports.identityMetadata` with the Azure AD tenant name of the format \*.onmicrosoft.com.
