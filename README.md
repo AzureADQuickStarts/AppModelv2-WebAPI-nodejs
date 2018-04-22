@@ -1,42 +1,35 @@
 #Azure Active Directory Sample REST API Service for Node.js using MongoDB and Restify
 
-This Node.js server will give you with a quick and easy way to set up a REST API Service using the OAuth2 protocol. Then this service is integrated with Azure Active Directory for API protection. The sample server included in the download are designed to run on any platform.
+This Node.js server will give you a quick and easy way to set up a REST API Service. Then this service is integrated with Azure Active Directory for API protection using the OAuth2 protocol. The sample server included in the download is designed to run on any platform.
 
 This REST API server is built using Restify and MongoDB with the following features:
 
-* A node.js server running an REST API interface with JSON using MongoDB as persistent storage
-* REST APIs leveraging OAuth2 API protection for endpoints using Microsoft Azure Active Directory
-
-We've released all of the source code for this example in GitHub under an Apache 2.0 license, so feel free to clone (or even better, fork!) and provide feedback on the forums.
+* A node.js server running a REST API interface with JSON using MongoDB as persistent storage
+* REST APIs leveraging OAuth2 protocol for API protection using Microsoft Azure Active Directory
 
 
-## Quick Start
+## Prerequisites
 
-Getting started with the sample is easy. It is configured to run out of the box with minimal setup.
+To run this sample you will need the following:
 
-### Step 1: Register a Microsoft Azure AD Tenant
+* Either a [Microsoft account](https://www.outlook.com) or [Office 365 for business account](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account)
 
-To use this sample you will need a Microsoft Azure Active Directory Tenant. If you're not sure what a tenant is or how you would get one, read [What is an Azure AD tenant](http://technet.microsoft.com/library/jj573650.aspx)? or [Sign up for Azure as an organization](http://azure.microsoft.com/en-us/documentation/articles/sign-up-organization/). These docs should get you started on your way to using Microsoft Azure AD.
+* Install Node.js from http://nodejs.org/
 
-### Step 2: Register your Web API with your Microsoft Azure AD Tenant
-
-After you get your Microsoft Azure AD tenant, please go to [https://apps.dev.microsoft.com/](https://apps.dev.microsoft.com/). On that page, click 'Add an app'. Give it a name like 'my_webapi_v2', then click 'Create application'. On the next page, click 'Add Platform' and select 'Web', then put 'http://localhost:3000' into the 'Redirect URIs' field, and click 'save'. Copy the Application Id of your application and save it somewhere, this value is the clientID of your web api, you will use it in step 6. 
-
-### Step 3: Download node.js for your platform
-To successfully use this sample, you need a working installation of Node.js.
-
-Install Node.js from [http://nodejs.org](http://nodejs.org).
-
-### Step 4: Install MongoDB on to your platform
-
-To successfully use this sample, you must have a working installation of MongoDB. We will use MongoDB to make our REST API persistent across server instances.
-
-Install MongoDB from [http://mongodb.org](http://www.mongodb.org).
+* Install MongoDB from [MongoDB download center ](https://www.mongodb.com/download-center?_ga=2.51199855.799714080.1524437300-1146184949.1522821734#production). Make sure to add the location of the MongoDB server to your environment PATH and run the MongoDB server.
 
 **NOTE:** This walkthrough assumes that you use the default installation and server endpoints for MongoDB, which at the time of this writing is: mongodb://localhost. This should work locally without any configuration changes if you run this sample on the same machine as you've installed and ran mongodb.
 
 
-### Step 5: Download the Sample application and modules
+## Register your Web API
+
+Create a new app at [apps.dev.microsoft.com](https://apps.dev.microsoft.com), or follow these [detailed steps](https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-app-registration/).  Make sure to:
+
+- Copy down the **Application Id** assigned to your app, you'll need it soon.
+- Add the **Web** platform for your app.
+- Enter the correct **Redirect URI**. The redirect uri indicates to Azure AD where authentication responses should be directed - the default for this sample is `http://localhost:3000`.
+
+## Download the Sample application and modules
 
 Next, clone the sample repo and install the NPM.
 
@@ -51,8 +44,10 @@ $ npm install
 ### Step 6: Configure your server using config.js
 
 Please update the `exports.creds` and `exports.mongoose_auth_local` in config.js as instructed.
+* Update `<tenant_name>` in `exports.identityMetadata` with the Azure AD tenant name of the format \*.onmicrosoft.com.
+* Update `exports.clientID` with the Application Id noted from app registration.
 
-### Step 7: Run the application
+## Run the application
 
 ```
 $ cd node-server
@@ -65,11 +60,36 @@ $ node app.js
 $ node server.js | bunyan
 ```
 
-### You're done!
+## You're done!
 
-You will have a server successfully running on `http://localhost:3000`. Your REST / JSON API Endpoint will be `http://localhost:3000/api/tasks`
+You will have a server successfully running on `http://localhost:3000`. Your REST / JSON API Endpoint will be available at `http://localhost:3000/api/tasks`. It will return 'unauthorized' when visited without a valid OAuth bearer token.
 
-### Acknowledgements
+
+## Community Help and Support
+
+We use [Stack Overflow](http://stackoverflow.com/questions/tagged/azure-active-directory) with the community to provide support. We highly recommend you ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-active-directory].
+
+If you find a bug or issue with this sample, please raise the issue on [GitHub Issues](../../issues).
+
+For issues with the passport-azure-ad library, please raise the issue on the library GitHub repo.
+
+## Contributing
+
+If you'd like to contribute to this sample, please follow the [GitHub Fork and Pull request model](https://help.github.com/articles/fork-a-repo/).
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.   
+
+## Security Library
+
+This library controls how users sign-in and access services. We recommend you always take the latest version of our library in your app when possible.
+
+## Security Reporting
+
+If you find a security issue with our libraries or services please report it to [secure@microsoft.com](mailto:secure@microsoft.com) with as much detail as possible. Your submission may be eligible for a bounty through the [Microsoft Bounty](http://aka.ms/bugbounty) program. Please do not post security issues to GitHub Issues or any other public site. We will contact you shortly upon receiving the information. We encourage you to get notifications of when security incidents occur by visiting [this page](https://technet.microsoft.com/en-us/security/dd252948) and subscribing to Security Advisory Alerts.
+
+Copyright (c) Microsoft Corporation.  All rights reserved. Licensed under the MIT License (the "License");
+
+## Acknowledgements
 
 We would like to acknowledge the folks who own/contribute to the following projects for their support of Microsoft Azure Active Directory and their libraries that were used to build this sample. In places where we forked these libraries to add additional functionality, we ensured that the chain of forking remains intact so you can navigate back to the original package. Working with such great partners in the open source community clearly illustrates what open collaboration can accomplish. Thank you!
 
@@ -79,10 +99,3 @@ We would like to acknowledge the folks who own/contribute to the following proje
 - [Restify-OAuth2](https://github.com/domenic/restify-oauth2) - This package provides a very simple OAuth 2.0 endpoint for the Restify framework. ``` restify-oauth2```
 - [node-jwt-simple](https://github.com/hokaccha/node-jwt-simple) - Library for parsing JSON Web Tokens (JWT) ```node-jwt-simple```
 - [http-bearer-strategy](https://github.com/jaredhanson/passport-http-bearer) - HTTP Bearer authentication strategy for Passport and Node.js.
-
-
-
-
-## About The Code
-
-Code hosted on GitHub under Apache 2.0 license
