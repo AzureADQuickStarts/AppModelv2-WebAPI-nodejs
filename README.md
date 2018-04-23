@@ -1,4 +1,6 @@
 # Azure Active Directory Sample REST API Service for Node.js using MongoDB and Restify
+| [Getting Started](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-devquickstarts-node-api) | [Library](https://github.com/AzureAD/passport-azure-ad) | [Docs](https://aka.ms/aadv2) | [Support](README.md#community-help-and-support) | [Protocol](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols)
+| --- | --- | --- | --- | --- |
 
 This Node.js server will give you a quick and easy way to set up a REST API Service. Then this service is integrated with Azure Active Directory for API protection using the OAuth2 protocol. The sample server included in the download is designed to run on any platform.
 
@@ -36,7 +38,7 @@ Next, clone the sample repo and install the NPM.
 From your shell or command line:
 
 ```
-$ git clone git@github.com:AzureADQuickStarts/WebAPI-Bearer-NodeJS.git
+$ git clone git@github.com:AzureADQuickStarts/AppModelv2-WebAPI-nodejs.git
 $ cd node-server
 $ npm install
 ```
