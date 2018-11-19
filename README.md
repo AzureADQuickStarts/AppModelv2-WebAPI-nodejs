@@ -59,7 +59,7 @@ $ node app.js
 **Is the server output hard to understand?:** We use `bunyan` for logging in this sample. The console won't make much sense to you unless you also install bunyan and run the server like above but pipe it through the bunyan binary:
 
 ```
-$ node server.js | bunyan
+$ node app.js | bunyan
 ```
 
 ## You're done!
