@@ -25,11 +25,10 @@ To run this sample you will need the following:
 
 ## Register your Web API
 
-Create a new app at [apps.dev.microsoft.com](https://apps.dev.microsoft.com), or follow these [detailed steps](https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-app-registration/).  Make sure to:
+Create a new app by navigating to  [Azure Portal - App registrations](https://go.microsoft.com/fwlink/?linkid=2083908), or follow these [detailed steps](https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-app-registration/).  Make sure to:
 
-- Copy down the **Application Id** assigned to your app, you'll need it soon.
-- Add the **Web** platform for your app.
-- Enter the correct **Redirect URI**. The redirect uri indicates to Azure AD where authentication responses should be directed - the default for this sample is `http://localhost:3000`.
+- Copy down the **Application Id** assigned to your app, you'll need it to configure the Visual Studio configuration file for this project.
+- In the **Redirect URI** section leave the dropdown value as 'Web' and enter the correct URI value. The redirect uri indicates to Azure AD where authentication responses should be directed - the default for this sample is `http://localhost:3000`.
 
 ## Download the Sample application and modules
 
@@ -38,16 +37,19 @@ Next, clone the sample repo and install the NPM.
 From your shell or command line:
 
 ```
-$ git clone git@github.com:AzureADQuickStarts/AppModelv2-WebAPI-nodejs.git
-$ cd node-server
+$ git clone https://github.com/AzureADQuickStarts/AppModelv2-WebAPI-nodejs
+
+$ cd AppModelv2-WebAPI-nodejs/node-server
+
 $ npm install
 ```
 
 ## Configure your server using config.js
 
-Please update the `exports.creds` and `exports.mongoose_auth_local` in config.js as instructed.
+Please update the `exports.creds` and `exports.mongoose_auth_local` and `exports.clientID` in config.js as instructed.
 * Update `<tenant_name>` in `exports.identityMetadata` with the Azure AD tenant name of the format \*.onmicrosoft.com.
 * Update `exports.clientID` with the Application Id noted from app registration.
+* Update `exports.mongoose_auth_local` with the correct URI value
 
 ## Run the application
 
