@@ -15,7 +15,7 @@ exports.creds = {
 
   // Required. 
   // Set to true if you use `function(req, token, done)` as the verify callback.
-  // Set to false if you use `function(req, token)` as the verify callback.
+  // Set to false if you use `function(token, done)` as the verify callback.
   passReqToCallback: false,
 
   // Required if you are using common endpoint and setting `validateIssuer` to true.
