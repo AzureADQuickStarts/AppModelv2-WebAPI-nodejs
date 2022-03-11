@@ -202,7 +202,7 @@ util.inherits(MissingTaskError, restify.RestError);
  */
 
 var server = restify.createServer({
-    name: "Windows Azure Active Directroy TODO Server",
+    name: "Windows Azure Active Directory TODO Server",
     version: "2.0.1"
 });
 
